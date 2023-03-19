@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Items List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 th:if="${searchTerm != null and searchTerm != ''}"
+        th:unless="${searchTerm == null or searchTerm == ''}">Fighter List</h1>
+    <form th:action="@{/listItems}" th:method="get">
+        <div class="input-group mb-3">
+            <input type="search" class="form-control" placeholder="Search by name" th:name="searchTerm"
+                   th:value="${searchTerm}" aria-label="Search" aria-describedby="button-addon2">
+
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Price</th>
+            <th>Year of Creation</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="itemModel : ${itemModels.content}">
+            <td th:text="${itemModel.name}"></td>
+            <td th:text="${itemModel.brandForm}"></td>
+            <td th:text="${itemModel.price}"></td>
+            <td th:text="${itemModel.yearOfCreation}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <ul class="pagination mt-5">
+        <li class="page-item">
+            <a class="page-link" th:href="@{/listItems/switchPage(pageToSwitch=${currentPage - 1})}">Previous</a>
+        </li>
+        <li
+                class="page-item"
+                th:classappend="${currentPage + 1 eq page} ? 'active' : 'not'"
+                th:each="page: ${#numbers.sequence(1, totalPages)}"
+        >
+            <a class="page-link" th:text="${page}" th:href="@{/listItems/switchPage(pageToSwitch=${page - 1})}"/>
+        </li>
+        <li class="page-item"><a class="page-link" th:href="@{/listItems/switchPage(pageToSwitch=${currentPage + 1})}">Next</a>
+        </li>
+
+    </ul>
+
+</div>
+</body>
+</html>
+
+
+
+
